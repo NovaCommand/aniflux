@@ -1,20 +1,21 @@
-import { Link } from "react-router-dom";
-import { useUser } from "../context/UserContext";
-import { useToast } from "./Toast";
+import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useToast } from './Toast';
+import { addToWatchlist, removeFromWatchlist, selectIsInWatchlist } from '../store/slices/userSlice';
 
 const AnimeCard = ({ anime }) => {
-  const { isInWatchlist, addToWatchlist, removeFromWatchlist } = useUser();
+  const dispatch = useDispatch();
   const { showToast } = useToast();
-  const inList = isInWatchlist(anime?.mal_id);
+  const inList = useSelector(selectIsInWatchlist(anime?.mal_id));
 
   const handleWatchlist = (e) => {
-    e.preventDefault(); // prevent Link navigation
+    e.preventDefault();
     if (inList) {
-      removeFromWatchlist(anime.mal_id);
-      showToast(`Removed from watchlist`, 'info');
+      dispatch(removeFromWatchlist(anime.mal_id));
+      showToast('Removed from watchlist', 'info');
     } else {
-      addToWatchlist(anime);
-      showToast(`Added to watchlist ✓`, 'success');
+      dispatch(addToWatchlist(anime));
+      showToast('Added to watchlist ✓', 'success');
     }
   };
 
@@ -37,8 +38,7 @@ const AnimeCard = ({ anime }) => {
         <p className="text-white text-sm font-medium mt-2 truncate">{anime.title}</p>
       </Link>
 
-      <button
-        onClick={handleWatchlist}
+      <button onClick={handleWatchlist}
         className={`absolute top-2 left-2 text-xs px-2 py-1 rounded transition opacity-0 group-hover:opacity-100 ${
           inList ? 'bg-red-600 text-white' : 'bg-black/60 text-white hover:bg-red-600'
         }`}>
