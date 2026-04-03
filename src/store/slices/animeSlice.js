@@ -4,9 +4,9 @@ import animeService from '../../services/animeService';
 // --- Async Thunks ---
 export const fetchTopAnime = createAsyncThunk(
   'anime/fetchTop',
-  async (_, { rejectWithValue }) => {
+  async (offset = 0, { rejectWithValue }) => {
     try {
-      return await animeService.getTopAnime();
+      return await animeService.getTopAnime(offset);
     } catch (err) {
       return rejectWithValue(err.message);
     }
@@ -15,9 +15,9 @@ export const fetchTopAnime = createAsyncThunk(
 
 export const fetchSeasonalAnime = createAsyncThunk(
   'anime/fetchSeasonal',
-  async (_, { rejectWithValue }) => {
+  async (offset = 0, { rejectWithValue }) => {
     try {
-      return await animeService.getSeasonalAnime();
+      return await animeService.getSeasonalAnime(offset);
     } catch (err) {
       return rejectWithValue(err.message);
     }
@@ -80,13 +80,21 @@ const animeSlice = createSlice({
     // Top Anime
     builder
       .addCase(fetchTopAnime.pending,   s => { s.top.loading = true;  s.top.error = null; })
-      .addCase(fetchTopAnime.fulfilled, (s, a) => { s.top.loading = false; s.top.data = a.payload; })
+      .addCase(fetchTopAnime.fulfilled, (s, a) => { 
+        s.top.loading = false; 
+        // Append if offset > 0 (pagination), otherwise replace (initial load)
+        s.top.data = a.meta.arg > 0 ? [...s.top.data, ...a.payload] : a.payload;
+      })
       .addCase(fetchTopAnime.rejected,  (s, a) => { s.top.loading = false; s.top.error = a.payload; });
 
     // Seasonal Anime
     builder
       .addCase(fetchSeasonalAnime.pending,   s => { s.seasonal.loading = true;  s.seasonal.error = null; })
-      .addCase(fetchSeasonalAnime.fulfilled, (s, a) => { s.seasonal.loading = false; s.seasonal.data = a.payload; })
+      .addCase(fetchSeasonalAnime.fulfilled, (s, a) => { 
+        s.seasonal.loading = false; 
+        // Append if offset > 0 (pagination), otherwise replace (initial load)
+        s.seasonal.data = a.meta.arg > 0 ? [...s.seasonal.data, ...a.payload] : a.payload;
+      })
       .addCase(fetchSeasonalAnime.rejected,  (s, a) => { s.seasonal.loading = false; s.seasonal.error = a.payload; });
 
     // Anime Detail
