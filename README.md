@@ -1,16 +1,32 @@
-# React + Vite
+# ANIFLUX 🎌
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-featured anime streaming site built with React.js.
 
-Currently, two official plugins are available:
+🔗 **Live Demo**: https://aniflux-nine.vercel.app
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
+- Browse trending and seasonal anime powered by the Jikan (MyAnimeList) API
+- Custom HLS video player with keyboard shortcuts
+- Search across thousands of anime titles
+- Watchlist and watch history saved to localStorage
+- Fully responsive dark UI
 
-## React Compiler
+## Tech Stack
+- **React 18** with Vite
+- **React Router v6** — client-side routing
+- **Tailwind CSS v4** — utility-first styling
+- **Jikan REST API** — anime data (no API key required)
+- **HLS.js** — adaptive bitrate video streaming
+- **React Context + localStorage** — persistent user state
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Architecture Highlights
+- Custom `useFetch` hook with cancellation to prevent memory leaks
+- Request queue + cache layer to respect Jikan's rate limits
+- Lazy-loaded routes with `React.lazy` and `Suspense`
+- Modular service layer (`animeService.js`) separating API logic from UI
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Running Locally
+git clone https://github.com/NovaCommand/aniflux.git
+cd aniflux
+npm install
+npm run dev
