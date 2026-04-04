@@ -30,8 +30,8 @@ const queuedFetch = (endpoint) => {
 };
 
 const animeService = {
-    getTopAnime: () => queuedFetch('/top/anime?limit=12'),
-    getSeasonalAnime: () => queuedFetch('/seasons/now?limit=12'),
+    getTopAnime: (offset = 0) => queuedFetch(`/top/anime?limit=12&offset=${offset}`),
+    getSeasonalAnime: (offset = 0) => queuedFetch(`/seasons/now?limit=12&offset=${offset}`),
     searchAnime: (query) => queuedFetch(`/anime?q=${encodeURIComponent(query)}&limit=20`),
     getAnimeById: (id) => queuedFetch(`/anime/${id}`),
     getAnimeEpisodes: (id) => queuedFetch(`/anime/${id}/episodes`),
